@@ -14,7 +14,7 @@ from matplotlib import cm
 from scipy import signal 
 from scipy import interpolate
 from scipy.optimize import curve_fit
-from scipy import asarray as ar,exp
+
 # =============================================================================
 ## to plot the TD and FD signal
 ############################

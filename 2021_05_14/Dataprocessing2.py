@@ -21,29 +21,23 @@ from scipy.constants import c
 um = 10**-6
 THz = 10**12
 
-name="p-doped GaAs_C 18817"
-name2="GaAs Wafer Number 25"
-L=0.7*um ## um film
+doped_dir = r'E:\CURPROJECT\Conductivity\2021_05_14\p-doped GaAs_C 18817'
+undoped_dir = r"E:\CURPROJECT\Conductivity\2021_05_14\GaAs Wafer Number 25"
+
+L=0.7*um # um film
 d_P=530*um # um doped
-d2=(530*um-L) #530-d3
-d=508*um# um undoped
-# xx=30 #phase abstracte statring point index
-# yy=201 #phase abstracte ending point  index #0.3THz =60
+d2=(530*um-L) # doped substrate - film
+d=508*um # 'reference' substrate
 
-os.chdir("/media/alex/sda2/ProjectsOverflow/Conductivity/2021_05_14/"+name)
-path=os.getcwd()
-dirs=os.listdir(path)
-
+os.chdir(doped_dir)
 
 npzfile=np.load("signal_doped.npz") #,ref_TD,time_r,sig_TD,time_s
-#npzfile.files
 ref_TD_P=npzfile["arr_0"]
 time_r_P=npzfile["arr_1"]
 sig_TD_P=npzfile["arr_2"]
 time_s_P=npzfile["arr_3"]
 
 npzfile=np.load("FFT_doped.npz") #ref_FD,ref_Ph,freq_s,sig_FD,sig_Ph,freq_s
-#npzfile.files
 ref_FD_P=npzfile["arr_0"]
 ref_Ph_p=npzfile["arr_1"]
 freq_s_P_ref=npzfile["arr_2"]
@@ -51,27 +45,21 @@ sig_FD_P=npzfile["arr_3"]
 sig_Ph_P=npzfile["arr_4"]
 
 npzfile=np.load("Parameter_doped.npz") #n_mean,K_mean,A_mean, freq_s
-#npzfile.files
 n_mean_P=npzfile["arr_0"]
 K_mean_P=npzfile["arr_1"]
 A_mean_P=npzfile["arr_2"]
 freq_s_P=npzfile["arr_3"]
 
-## load undopes samples
-os.chdir("/media/alex/sda2/ProjectsOverflow/Conductivity/2021_05_14/"+name2)
-path=os.getcwd()
-dirs_undoped=os.listdir(path)
-
+## load undoped samples
+os.chdir(undoped_dir)
 
 npzfile=np.load("signal_undoped.npz") #,ref_TD,time_r,sig_TD,time_s
-#npzfile.files
 ref_TD_u=npzfile["arr_0"]
 time_r_u=npzfile["arr_1"]
 sig_TD_u=npzfile["arr_2"]
 time_s_u=npzfile["arr_3"]
 
 npzfile=np.load("FFT_undoped.npz") #ref_FD,freq_s,sig_FD,freq_s
-#npzfile.files
 ref_FD_u=npzfile["arr_0"]
 ref_Ph_u=npzfile["arr_1"]
 freq_s_u_ref=npzfile["arr_2"]
@@ -79,14 +67,13 @@ sig_FD_u=npzfile["arr_3"]
 sig_Ph_u=npzfile["arr_4"]
 
 npzfile=np.load("Parameter_undoped.npz") #n_mean,K_mean,A_mean, freq_s
-#npzfile.files
 n_mean_u=npzfile["arr_0"]
 K_mean_u=npzfile["arr_1"]
 A_mean_u=npzfile["arr_2"]
 freq_s_u=npzfile["arr_3"]
 
 indx= (freq_s_u>=0.1) & (freq_s_u<3)
-indx3=(freq_s_u>= 0.11 ) & (freq_s_u<= 1) 
+indx3=(freq_s_u>= 0.11 ) & (freq_s_u<= 1)
 
 Trans12= 2/(n_mean_u+1)
 Trans21=(2*n_mean_u)/(n_mean_u+1)
