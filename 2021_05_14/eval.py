@@ -1,9 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Tue Jun 15 12:06:40 2021
-
-@author: talebf
-"""
 import numpy as np
 from numpy import pi
 from scipy.fftpack import fft
@@ -21,8 +15,10 @@ from scipy.constants import c
 um = 10 ** -6
 THz = 10 ** 12
 
-doped_dir = r'E:\CURPROJECT\Conductivity\2021_05_14\p-doped GaAs_C 18817'
-undoped_dir = r"E:\CURPROJECT\Conductivity\2021_05_14\GaAs Wafer Number 25"
+#doped_dir = r'E:\CURPROJECT\Conductivity\2021_05_14\p-doped GaAs_C 18817'
+doped_dir = r'/media/alex/sda2/ProjectsOverflow/Conductivity/2021_05_14/p-doped GaAs_C 18817'
+#undoped_dir = r"E:\CURPROJECT\Conductivity\2021_05_14\GaAs Wafer Number 25"
+undoped_dir = r'/media/alex/sda2/ProjectsOverflow/Conductivity/2021_05_14/GaAs Wafer Number 25'
 
 d_film = 0.7 * um  # thin doped film
 d_sub = 530 * um - d_film # 'sample' sub doped
@@ -138,19 +134,35 @@ def model_3(n_film):
 
     return T_num / T_denom
 
+def model_4(k_film):
+    n3 = 3.6
+    n2 = n3 + 1j*k_film # n real subst = n real sample
+
+    t01, t12, tr01 = 2 * n1 / (n1 + n2), 2 * n1 / (n1 + n2), 2 * n1 / (n1 + n3)
+    r10, r12 = (n2 - n1) / (n2 + n1), (n2 - n3) / (n2 + n3)
+
+    t = t01 * t12 / tr01
+    r = r10 * r12
+
+    T_num = t * exp(1j * n3 * (d_sub - d_sub_ref) * omega / c) * exp(1j * (n2 - n1) * d_film * omega / c)
+    T_denom = (1 + r * exp(2j * n2 * d_film * omega / c))
+
+    return T_num / T_denom
 
 for idx in range(len(freq_s_u)):
     if idx % 50 != 0:
         continue
 
-n_guess = 3.6 + 1j * 0.1  # film, unknown
+for k_guess in np.linspace(0, 10, 100):
+    T_model = model_4(k_guess)
 
-T_model = model_3(n_guess)
+    print(T_model[179], T_mess[179])
 
+"""
 plt.plot(freqs, T_model.real, label='T_model real')
 plt.plot(freqs, T_model.imag, label='T_model imag')
 #plt.plot(freqs, np.abs(T_model), label='|T_model|')
-
+"""
 plt.plot(freqs, T_mess.real, label='T_mess real')
 plt.plot(freqs, T_mess.imag, label='T_mess imag')
 #plt.plot(freqs, np.abs(T_mess), label='|T_mess|')
