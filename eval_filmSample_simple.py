@@ -6,10 +6,12 @@ from scipy.constants import c
 um = 10 ** -6
 THz = 10 ** 12
 
-sample_path = r'E:\CURPROJECT\Conductivity\2021_05_14\p-doped GaAs_C 18817\Sample\2021-05-14T11-25-28.123213-Sample_GaAs_C 18817--X_-3.000 mm-Y_14.000 mm.txt'
+sample_path = r'/media/alex/sda2/ProjectsOverflow/Conductivity/2021_05_14/p-doped GaAs_C 18817/Sample/2021-05-14T11-25-28.123213-Sample_GaAs_C 18817--X_-3.000 mm-Y_14.000 mm.txt'
+#sample_path = r'E:\CURPROJECT\Conductivity\2021_05_14\p-doped GaAs_C 18817\Sample\2021-05-14T11-25-28.123213-Sample_GaAs_C 18817--X_-3.000 mm-Y_14.000 mm.txt'
 sample_data = np.loadtxt(sample_path)
 
-ref_path = r'E:\CURPROJECT\Conductivity\2021_05_14\p-doped GaAs_C 18817\Reference\2021-05-14T10-49-49.145531-Reference_GaAs_C 18817--X_0.000 mm-Y_10.000 mm.txt'
+ref_path = r'/media/alex/sda2/ProjectsOverflow/Conductivity/2021_05_14/p-doped GaAs_C 18817/Reference/2021-05-14T10-49-49.145531-Reference_GaAs_C 18817--X_0.000 mm-Y_10.000 mm.txt'
+#ref_path = r'E:\CURPROJECT\Conductivity\2021_05_14\p-doped GaAs_C 18817\Reference\2021-05-14T10-49-49.145531-Reference_GaAs_C 18817--X_0.000 mm-Y_10.000 mm.txt'
 ref_data = np.loadtxt(ref_path)
 
 sample_data[:, 1] -= sample_data[0, 1]
@@ -43,7 +45,7 @@ L, d = 0.7*um, 508*um
 n1 = 1
 n = 3.6
 
-k = 15
+k = 13
 n2 = n + 1j*k
 
 t01, t12, t23 = 2/(1+n2), 2*n2/(n2+n), 2*n/(n+1)
@@ -69,7 +71,7 @@ ax[0].plot(freqs/10**12, T_model.real, label='model real')
 ax[0].plot(freqs/10**12, T_mess.real, label='T_mess real')
 ax[0].legend()
 
-ax[1].plot(freqs/10**12, T_model.imag, label='measurement imag')
+ax[1].plot(freqs/10**12, T_model.imag, label='model imag')
 ax[1].plot(freqs/10**12, T_mess.imag, label='measurement imag')
 ax[1].legend()
 
