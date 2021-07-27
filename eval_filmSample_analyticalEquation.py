@@ -39,42 +39,14 @@ T_mess = sample_fft/ref_fft
 
 omega = 2*pi*freqs
 L, d = 0.7*um, 508*um
-n = 3.55
+n = np.load('n_analytical.npy')
 
-k = 14
-n2 = n + 1j*k
+alpha = (-2 / L) * np.log(np.abs(T_mess) * (n + 1) ** 2 / (4 * n))
 
-t01, t12, t23 = 2/(1+n2), 2*n2/(n2+n), 2*n/(n+1)
-t = t01*t12*t23
+kappa = c*alpha/(2*omega)
 
-r01, r12 = (1 - n2)/(1+n2), (n2-n)/(n2+n)
-r = r01*r12
+freqs, kappa, alpha = freqs[freq_range], kappa[freq_range], alpha[freq_range]
 
-del_1, del_2 = n2*L*omega/c, n*d*omega/c
-
-T_ref = exp(1j*(d+L)*omega/c)
-
-T_sample = t*(1/(exp(-1j*(del_1+del_2)) + r*exp(1j*(del_1-del_2))))
-
-T_model = T_sample/T_ref
-
-fig, ax = plt.subplots(nrows=1, ncols=3)
-
-freqs, T_mess, T_model = freqs[freq_range], T_mess[freq_range], T_model[freq_range]
-
-print(T_model[200])
-print(T_mess[200])
-
-ax[0].plot(freqs/10**12, T_model.real, label='model real')
-ax[0].plot(freqs/10**12, T_mess.real, label='T_mess real')
-ax[0].legend()
-
-ax[1].plot(freqs/10**12, T_model.imag, label='model imag')
-ax[1].plot(freqs/10**12, T_mess.imag, label='measurement imag')
-ax[1].legend()
-
-ax[2].plot(freqs/10**12, np.abs(T_model), label='|model|')
-ax[2].plot(freqs/10**12, np.abs(T_mess), label='|measurement|')
-ax[2].legend()
-
+plt.plot(freqs, alpha/100, label='alpha analytical (1/cm)')
+plt.legend()
 plt.show()
